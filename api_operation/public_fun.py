@@ -234,30 +234,30 @@ def api_get_mqtt_numhistory(key, bind_id):
 # 指定设备历史消息分页查询
 def api_get_mqtt_paghistory(key, bind_id, pag):
     pag = int(pag)
-    # print("方法内"+bind_id,pag)
     try:
         def data(bindid, pag):
-            args = (bindid, pag)
+            if pag == 1:
+                pag2 = 0
+            else:
+                pag2 = pag * 10 - 10
+            # pag2 = pag
+            args = (bindid, pag2)
             data1, data_list = get_data_fix(
-                "SELECT * FROM iot_mqtt_historical WHERE bind_id = '%s'limit %s,10 " % args)
+                "SELECT * FROM iot_mqtt_historical WHERE bind_id = '%s' order by id desc limit %s,10" % args)
             data2 = generate_tuple(data_list, data1, 'bind')
+            print(data2)
             return data2
 
-        # data_token = get_data("SELECT * FROM iot_cdk_cdk WHERE cdk = '%s'" % key)
         if get_data("SELECT * FROM iot_cdk_cdk WHERE cdk = '%s'" % key):
-            if pag == 1:
-                pag = 0
-            else:
-                pag = pag * 10 - 10
-            data = data(bind_id, pag)
+
+            pag_data = pag
+            data = data(bind_id, pag_data)
             print(data)
             return data
         elif get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % key):
-            if pag == 1:
-                pag = 0
-            else:
-                pag = pag * 10 - 10
-            data = data(bind_id, pag)
+
+            pag_data = pag
+            data = data(bind_id, pag_data)
             print(data)
             return data
         else:
