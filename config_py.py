@@ -23,13 +23,15 @@ mqtt_topic = 'test'
 mqtt_send_topic = 'send_test'
 # 设备响应消息主题
 mqtt_response_topic = 'response_test'
+# 客户端订阅主题
+mqtt_client_topic = 'app_client_topic'
 
 # 数据库地址
 db_url = '127.0.0.1'
 # 数据库用户名
 db_user = 'root'
 # 数据库密码
-db_passwd = 'jianyu@@'
+db_passwd = 'root'
 # 数据库名
 db_from = 'flask_mqtt'
 
