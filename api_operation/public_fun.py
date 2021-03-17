@@ -281,7 +281,7 @@ def user_device_ctrl(key, mac, instruction_id):
         data.update({'mac': mac})
         data.update({'data': instruction[0][0]})
         print(data)
-        ctrl_send_mqtt = mqtt_publish(generate_json(data))
+        ctrl_send_mqtt = mqtt_publish(generate_json(data), config_py.mqtt_send_topic)
         if ctrl_send_mqtt == 'PUBLISH_SUCCESS':
             print('线程开启之前' + str(i))
             thrding_start()
