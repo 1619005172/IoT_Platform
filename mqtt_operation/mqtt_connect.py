@@ -10,7 +10,7 @@ from data_sql.redis_data import online_state, device_callback_set
 from system_fun.error_code import error_sql
 from system_fun.generate_tuple import generate_tuple
 from system_fun.get_date import get_time
-from system_fun.json_analysis import analysis_json
+from system_fun.json_analysis import analysis_json, generate_json
 
 
 # 连接服务器回调
@@ -117,7 +117,7 @@ def topic_msg(msg, topic):
             msg2 = ''
             for key, values in msg:
                 msg2 = msg2 + key + ':' + values + '|'
-            print(msg2)
+            # print(msg2)
             # 验证mac是否存在
             if get_bind(mac):
                 # if data['getway']:
@@ -128,9 +128,13 @@ def topic_msg(msg, topic):
                 # else:
                 # 普通设备消息处理
                 data1, data_list = get_data_fix("SELECT * FROM iot_device_bind WHERE mac = '%s'" % mac)
-                data = generate_tuple(data_list, data1, 'bind')[0]
-                args = (data['place_id'], get_time(), data['id'], msg2)
-                args2 = (data['place_id'], str(get_time()), data['id'], msg2)
+                data2 = generate_tuple(data_list, data1, 'bind')[0]
+                args = (data2['place_id'], get_time(), data2['id'], msg2)
+                # 转发消息到客户端主题
+                client_data = generate_json(data)
+                # print(client_data)
+                mqtt_publish(client_data, config_py.mqtt_client_topic)
+                # args2 = (data['place_id'], str(get_time()), data['id'], msg2)
                 print(args)
                 # 存储消息历史
                 sql_msg = sql_updata("INSERT INTO iot_mqtt_historical (place_id,date ,bind_id,data) "
@@ -162,9 +166,10 @@ def mqtt_response(msg, topic):
 
 
 # mqtt消息发布
-def mqtt_publish(mqtt_publish_text):
+def mqtt_publish(mqtt_publish_text, topic):
     try:
-        state = client.publish(config_py.mqtt_send_topic, payload=mqtt_publish_text, qos=0, retain=False)
+        send_topic = topic
+        state = client.publish(send_topic, payload=mqtt_publish_text, qos=0, retain=False)
         print('发送报文:' + mqtt_publish_text)
         if state.rc == mqtt.MQTT_ERR_SUCCESS:
             return "PUBLISH_SUCCESS"
