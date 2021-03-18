@@ -51,8 +51,9 @@ def get_data_fix(sql):
             fields = cursor.description
             return results, fields
         except:
+            db.close()
             return error_sql.error
-        db.close()
+
     else:
         return error_sql.connect_error
 
@@ -108,6 +109,8 @@ def del_data(del_sql):
         return error_sql.connect_error
 
 # if __name__ == '__main__':
-#     # text = sql_updata("UPDATE user_admin SET token = '%s' WHERE username = '%s'" % ('sf463ae1gv6ae', 'args'))
-#     # print(text)
-#     text = get_data("SELECT * FROM iot_device_bind")
+# text = sql_updata("UPDATE user_admin SET token = '%s' WHERE username = '%s'" % ('sf463ae1gv6ae', 'args'))
+# print(text)
+# args = (6, 0)
+# text = get_data_fix("SELECT * FROM iot_mqtt_historical WHERE bind_id = '%s' order by id desc limit %s,10" % args)
+# print(text)
