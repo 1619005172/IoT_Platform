@@ -69,7 +69,7 @@ def del_admin(user_id, token):
 def get_data_sql(token):
     data_token = get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % token)
     if data_token:
-        data1, data_list = get_data_fix("SELECT * FROM iot_device_type")
+        data1, data_list = get_data_fix("SELECT * FROM iot_device_bind")
         # data1, data_list = get_data_fix(
         #     "select iot_device_bind.*,"
         #     "iot_control_bind.type_id,"
