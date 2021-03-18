@@ -252,19 +252,48 @@ def api_get_mqtt_paghistory(key, bind_id, pag):
 
             pag_data = pag
             data = data(bind_id, pag_data)
-            print(data)
+            # print(data)
             return data
         elif get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % key):
 
             pag_data = pag
             data = data(bind_id, pag_data)
-            print(data)
+            # print(data)
             return data
         else:
             print('用户验证失败')
             return err_user.key_error
     except:
         print('系统错误')
+
+
+# 获取设备控制信息
+def get_device_ctrl_info(key, mac):
+    def get_info(device_mac):
+        args = device_mac
+        data1, data_list = get_data_fix("select type_id,ctrl_name,data from iot_control_bind where mac = '%s'" % args)
+        ctrl_type = []
+        ctrl_name = []
+        ctrl_data = []
+        for ctrl_info in data1:
+            ctrl_type.append(ctrl_info[0])
+            ctrl_name.append(ctrl_info[1])
+            ctrl_data.append(ctrl_info[2])
+        re_data = [ctrl_type, ctrl_name, ctrl_data]
+        # print(re_data)
+        data2 = generate_tuple(data_list, re_data, 'ctrl_info')
+        # print(data2)
+        return data2
+
+    if get_data("SELECT * FROM iot_cdk_cdk WHERE cdk = '%s'" % key):
+        data = get_info(mac)
+        return data
+    elif get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % key):
+        data = get_info(mac)
+        return data
+    else:
+        print('用户验证失败')
+        return err_user.key_error
 
 
 i = True
@@ -381,6 +410,6 @@ def huidiaojiance(mac):
 #     except:
 #         print('系统错误')
 
-
+#
 if __name__ == '__main__':
-    device_ctrl('6938EC5F52BECAE00F583E4F02D056D8', 8053921, 1)
+    get_device_ctrl_info('6938EC5F52BECAE00F583E4F02D056D8', 8053921)

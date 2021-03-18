@@ -69,8 +69,25 @@ def del_admin(user_id, token):
 def get_data_sql(token):
     data_token = get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % token)
     if data_token:
-        # data = {}
-        data1, data_list = get_data_fix("SELECT * FROM iot_device_bind")
+        data1, data_list = get_data_fix("SELECT * FROM iot_device_type")
+        # data1, data_list = get_data_fix(
+        #     "select iot_device_bind.*,"
+        #     "iot_control_bind.type_id,"
+        #     "iot_control_bind.`ctrl_name`,"
+        #     "iot_control_bind.`data` "
+        #     "from iot_device_bind "
+        #     "left join iot_control_bind "
+        #     "on iot_device_bind.mac=iot_control_bind.mac")
+        # data_list = []
+        # ctrl_list = []
+        # all_list = []
+        # for i in data_list:
+        #     all_list.append(i[0])
+        # print(all_list)
+        # for j in all_list:
+
+            # print(sql_data1)
+        # print(data1)
         data = generate_tuple(data_list, data1, 'bind')
         return data
     else:
@@ -228,7 +245,7 @@ def bind_ctrl_dir(token, type_id, mac, name, data):
     data_token = get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % token)
     args = (type_id, mac, name, data)
     if data_token:
-        data_name = get_data("SELECT * FROM iot_control_bind WHERE name = '%s'" % args[2])
+        data_name = get_data("SELECT * FROM iot_control_bind WHERE ctrl_name = '%s'" % args[2])
         if data_name:
             return '此指令已添加'
         else:
@@ -236,7 +253,7 @@ def bind_ctrl_dir(token, type_id, mac, name, data):
             user_id = data_token[0][0]
             args2 = (time, user_id)
             args = args + args2
-            data = sql_updata("INSERT INTO iot_control_bind(type_id,device_bind_id,name,data,date,user_id)"
+            data = sql_updata("INSERT INTO iot_control_bind(type_id,device_bind_id,ctrl_name,data,date,user_id)"
                               "VALUES ('%s','%s','%s','%s','%s','%s')" % args)
             return data
     else:
