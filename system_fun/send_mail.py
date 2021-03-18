@@ -45,7 +45,7 @@ def send_mail(acc_num, message):
         return 'error'
 
 
-if __name__ == '__main__':
-    num = ['1619005172@qq.com', '64074652@qq.com']
-    send_mail(num, '测试信息')
+# if __name__ == '__main__':
+#     num = ['1619005172@qq.com', '64074652@qq.com']
+#     send_mail(num, '测试信息')
     # get_config()

@@ -13,12 +13,19 @@ def generate_tuple(data_list, data, name):
     for i in data_list:
         column_list.append(i[0])
     print(column_list)
-    for row in data:
+    if name == "ctrl_info":
         data2 = {}
         for i in range(len(column_list)):
-            data2[column_list[i]] = str(row[i])
+            data2[column_list[i]] = str(data[i])
         data1.append(data2)
-    return data1
+        return data1
+    else:
+        for row in data:
+            data2 = {}
+            for i in range(len(column_list)):
+                data2[column_list[i]] = str(row[i])
+            data1.append(data2)
+        return data1
 
 
 # # 在线数据处理(已作废)
