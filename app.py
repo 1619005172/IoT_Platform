@@ -3,7 +3,7 @@ from flask import Flask, request
 from api_operation.Android.user_android import testing_key
 from api_operation.public_fun import api_get_all, api_get_type, api_get_place, api_get_all_typename, \
     api_get_all_placename, api_get_typename, api_get_placename, api_get_mqtt_allhistory, api_get_mqtt_numhistory, \
-    api_get_mqtt_paghistory, user_device_ctrl
+    api_get_mqtt_paghistory, user_device_ctrl, get_device_ctrl_info
 from mqtt_operation.mqtt_connect import mqtt_publish, run_mqtt_thread
 from system_fun.json_analysis import return_token, return_message, return_data_all
 from api_operation.Web_admin.user_admin import login, add_admin, del_admin, get_data_sql, get_type, get_place, \
@@ -441,6 +441,21 @@ def android_key():
             data = testing_key(key, mac)
             print(data)
             return return_message('200', data)
+
+
+# 获取设备控制信息
+@app.route('/api/get_ctrl_info', methods=['POST', 'GET'])
+def get_device_info():
+    if request.method != 'POST':
+        return err_api()
+    else:
+        key = request.form.get('key')
+        mac = request.form.get('mac')
+        if not all([key, mac]):
+            return err_empty()
+        else:
+            data = get_device_ctrl_info(key, mac)
+            return return_message(error_msg.api_success, data)
 
 
 # 设备控制
