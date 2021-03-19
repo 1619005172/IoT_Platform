@@ -178,7 +178,7 @@ def get_place(token):
     else:
         return err_user.authority
 
-
+#此处有bug需要修改
 # 添加设备
 def add_device_bind(token, device_id, place_id, name, device_mac):
     data_token = get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % token)
