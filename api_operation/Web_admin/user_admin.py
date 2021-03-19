@@ -110,6 +110,8 @@ def get_online_all(token):
         return err_user.authority
 
 
+#这里要做添加控制指令
+# 35洒56该vbw56v
 # 添加设备类型
 def add_type(token, type, name):
     try:
@@ -178,7 +180,7 @@ def get_place(token):
     else:
         return err_user.authority
 
-#此处有bug需要修改
+
 # 添加设备
 def add_device_bind(token, device_id, place_id, name, device_mac):
     data_token = get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % token)
@@ -205,7 +207,7 @@ def del_device_bind(token, device_id):
         try:
             return del_data("DELETE FROM iot_device_bind WHERE id = '%s'" % device_id)
         except:
-            error_sql.error
+            return error_sql.error
     else:
         return err_user.authority
 
@@ -231,13 +233,16 @@ def user_add_ctrl_type(token, type_id, name):
 
 # 管理员获取所有控制类型
 def user_get_ctrl_type(token):
-    data_token = get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % token)
-    if data_token:
-        data_type, data_list = get_data_fix("SELECT * FROM iot_control_type")
-        data = generate_tuple(data_list, data_type, 'place')
-        return data
-    else:
-        return err_user.authority
+    try:
+        data_token = get_data("SELECT * FROM iot_user_admin WHERE token = '%s'" % token)
+        if data_token:
+            data_type, data_list = get_data_fix("SELECT * FROM iot_control_type")
+            data = generate_tuple(data_list, data_type, 'place')
+            return data
+        else:
+            return err_user.authority
+    except:
+        return error_sql.error
 
 
 # 管理员绑定控制指令
